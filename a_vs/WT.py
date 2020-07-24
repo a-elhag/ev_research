@@ -57,8 +57,23 @@ pow_edges_wt = np.r_[0, pow_edges_wt]
 wind_edges = np.digitize(wind, edges_wt)
 wind_edges = pow_edges_wt[wind_edges]
 
+"""
 ## Part4: Plotting
-plt.plot(wind_edges[0,:])
-plt.show()
+plt.subplot(311)
+plt.plot(wind[0,:], label = 'Orig Y1')
+plt.plot(wind_edges[0,:], label = 'New Y1')
+plt.legend()
 
+plt.subplot(312)
+plt.plot(wind[1,:], label = 'Orig Y2')
+plt.plot(wind_edges[0,:], label = 'New Y2')
+plt.legend()
+
+plt.subplot(313)
+plt.plot(wind[2,:], label = 'Orig Y3')
+plt.plot(wind_edges[0,:], label = 'New Y3')
+plt.legend()
+
+plt.show()
+"""
 
