@@ -3,6 +3,7 @@ import numpy as np
 from scipy.io import loadmat
 
 """
+Using Approximated WT characteristics
 Wind Edges:
 Cut_In Speed  = 4m/s
 Rated Speed   = 16m/s
@@ -54,24 +55,24 @@ for _ in range(1,pow_edges_wt.shape[0]-2):
 pow_edges_wt = np.r_[0, pow_edges_wt]
 
 ## Part3: Applying Edges
-wind_edges = np.digitize(wind, edges_wt)
-wind_edges = pow_edges_wt[wind_edges]
+Pwt = np.digitize(wind, edges_wt) # Power Wind Turbine
+Pwt = pow_edges_wt[Pwt]
 
 """
 ## Part4: Plotting
 plt.subplot(311)
 plt.plot(wind[0,:], label = 'Orig Y1')
-plt.plot(wind_edges[0,:], label = 'New Y1')
+plt.plot(Pwt[0,:], label = 'New Y1')
 plt.legend()
 
 plt.subplot(312)
 plt.plot(wind[1,:], label = 'Orig Y2')
-plt.plot(wind_edges[0,:], label = 'New Y2')
+plt.plot(Pwt[0,:], label = 'New Y2')
 plt.legend()
 
 plt.subplot(313)
 plt.plot(wind[2,:], label = 'Orig Y3')
-plt.plot(wind_edges[0,:], label = 'New Y3')
+plt.plot(Pwt[0,:], label = 'New Y3')
 plt.legend()
 
 plt.show()
