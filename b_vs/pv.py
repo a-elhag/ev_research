@@ -6,7 +6,7 @@ from scipy.io import loadmat
 # dict_keys(['__header__', '__version__', '__globals__',
 # 'tempX', 'PVdata', 'RTS', 'Wind'])
 
-data = loadmat('1DataOrig.mat')
+data = loadmat('../a_data/b_vs/in/solar_wind.mat')
 tempX = data['tempX']
 PVdata = data['PVdata']
 RTS = data['RTS']
@@ -59,5 +59,5 @@ Ppv[Ppv > PVRatedPower] = PVRatedPower
 # We will scale our data such that the max nominal power is 1
 Ppv = Ppv/Ppv.max()
 
-np.save('2pv.npy', Ppv)
+np.save('../a_data/b_vs/out/pv.npy', Ppv)
 # Ppv = np.load('2pv.npy')

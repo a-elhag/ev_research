@@ -18,7 +18,7 @@ PowEdg_WT = discretize(Wind_Yr,Edges_WT)
 """
 
 ## Part1: Inputting Wind Data
-data = loadmat('1DataOrig.mat')
+data = loadmat('../a_data/b_vs/in/solar_wind.mat')
 wind = data['Wind']
 wind = wind.reshape((10, 8760))
 

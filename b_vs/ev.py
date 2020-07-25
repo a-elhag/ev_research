@@ -3,7 +3,7 @@ import numpy as np
 from scipy.io import loadmat
 
 ## Part1: Loading EV Data
-data_ev = loadmat('1DataEV.mat')
+data_ev = loadmat('../a_data/b_vs/in/parking_lot.mat')
 
 """
 for key, value in data_ev.items():
