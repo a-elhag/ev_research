@@ -11,6 +11,7 @@ numpy = "*"
 ipython = "*"
 scipy = "*"
 pynvim = "*"
+psutil = "*"
 
 [requires]
 python_version = "3.8"

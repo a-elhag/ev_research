@@ -28,11 +28,26 @@ class Split():
     def day_no(self, day):
         return (self.seasons_days[day] - dt.date(2012, 1, 1)).days
 
+    def hour_no(self, day):
+        return self.day_no(day)*24
+
+    def season_range(self):
+        # Day 1 needs to wrap around, in our PV+WT data we have only 365 days but
+        # in 2012 there is 366 days (that's why we add 1 extra day)
+
+        self.day1 = self.seasons_days[0] - dt.date(2012, 1, 1)
+        self.day1 = self.day1.days + 1
+        self.hour1 = self.day1*24
+
+        self.seasons_range = np.empty((4), object)
+        self.seasons_range[0] = np.array(range(self.hour1, self.hour_no(1)))
+        self.seasons_range[1] = np.array(range(self.hour_no(1), self.hour_no(2)))
+        self.seasons_range[2] = np.array(range(self.hour_no(2), self.hour_no(3)))
+        self.seasons_range[3] = np.array(range(self.hour_no(3), self.hour_no(4)))
+
+
     def season_split(self):
-        self.seasons = np.empty((1,4), object)
-        self.seasons_range = np.empty((1,4), object)
-
-
+        self.seasons = np.empty((4), object)
 
         if self.ev_flag:
             pass
@@ -41,3 +56,8 @@ class Split():
 
 
 split_pv = Split(Ppv, False)
+split_pv.season_range()
+
+for _ in range(4):
+    print(split_pv.seasons_range[_])
+
