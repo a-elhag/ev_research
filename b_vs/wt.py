@@ -58,6 +58,8 @@ pow_edges_wt = np.r_[0, pow_edges_wt]
 Pwt = np.digitize(wind, edges_wt) # Power Wind Turbine
 Pwt = pow_edges_wt[Pwt]
 
+np.save('../a_data/b_vs/out/wt.npy', Pwt)
+
 """
 ## Part4: Plotting
 plt.subplot(311)

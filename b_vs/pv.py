@@ -60,4 +60,3 @@ Ppv[Ppv > PVRatedPower] = PVRatedPower
 Ppv = Ppv/Ppv.max()
 
 np.save('../a_data/b_vs/out/pv.npy', Ppv)
-# Ppv = np.load('2pv.npy')

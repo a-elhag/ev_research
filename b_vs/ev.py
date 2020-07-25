@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import loadmat
 
@@ -23,12 +22,12 @@ data_ev['LogicXXX_hr'][0, day][driver, hour]
 
 ## Part2: Arrival Locations + Duration
 # We need to find when our drivers arrive and for how long they stay
-array_ev = np.empty((6,366), object)
+array_ev = np.empty((6, 366), object)
 
 idx = -1
 for key, lot in data_ev.items():
     if type(lot).__module__ == np.__name__:
-        idx +=1
+        idx += 1
         for day in range(lot.shape[1]):
             list_ev = []
             lot_day = lot[0, day]
@@ -42,6 +41,7 @@ for key, lot in data_ev.items():
                     break
             array_ev[idx, day] = np.array(list_ev)
 
+np.save('../a_data/b_vs/out/ev.npy', array_ev)
 """
 array_ev[parking_lot, day][driver, 0] ==> Arrival
 array_ev[parking_lot, day][driver, 1] ==> Duration
