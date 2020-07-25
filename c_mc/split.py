@@ -56,21 +56,28 @@ class Split():
                 self.seasons[_] = self.data.take(self.seasons_range[_],
                                                  axis=1, mode='wrap')
 
+    def hour_split(self):
+        self.seasons_hours = np.empty((4, 24), object)
+
+        if self.ev_flag:
+            pass
+        else:
+            for season in range(4):
+                for hour in range(24):
+                    self.seasons_hours[season, hour] = \
+                    self.seasons[season][:, hour::24].flatten()
+
+
+
+
+split_wt = Split(Pwt, False)
+split_wt.season_range()
+split_wt.season_split()
+split_wt.hour_split()
 
 split_pv = Split(Ppv, False)
 split_pv.season_range()
 split_pv.season_split()
+split_pv.hour_split()
 
-import matplotlib.pyplot as plt
-fig = np.empty(4, object)
-ax = np.empty(4, object)
 
-for season in range(4):
-    fig[season] = plt.figure()
-    ax[season] = plt.axes()
-    for year in range(6):
-        ax[season].plot(split_pv.seasons[season][year,:], label=f"{year}")
-        ax[season].set_title(f"Season Number {season}")
-        ax[season].legend()
-
-plt.show()
