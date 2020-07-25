@@ -23,18 +23,26 @@ data_ev['LogicXXX_hr'][0, day][driver, hour]
 
 ## Part2: Arrival Locations + Duration
 # We need to find when our drivers arrive and for how long they stay
-array_ev = np.empty(366, object)
+array_ev = np.empty((6,366), object)
 
-for _ in range(366):
-    list_ev = []
-    a = data_ev['Logic710_hr'][0, _]
+idx = -1
+for key, lot in data_ev.items():
+    if type(lot).__module__ == np.__name__:
+        idx +=1
+        for day in range(lot.shape[1]):
+            list_ev = []
+            lot_day = lot[0, day]
 
-    for row in a:
-        try:
-            idx_row = list(row).index(1)
-            sum_row = np.sum(row)
-            list_ev.append([idx_row, sum_row])
-        except:
-            break
-    array_ev[_] = np.array(list_ev)
+            for lot_day_row in lot_day:
+                try:
+                    idx_row = list(lot_day_row).index(1)
+                    sum_row = np.sum(lot_day_row)
+                    list_ev.append([idx_row, sum_row])
+                except:
+                    break
+            array_ev[idx, day] = np.array(list_ev)
 
+"""
+array_ev[parking_lot, day][driver, 0] ==> Arrival
+array_ev[parking_lot, day][driver, 1] ==> Duration
+"""
