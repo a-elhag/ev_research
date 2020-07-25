@@ -24,4 +24,11 @@ data_ev['LogicXXX_hr'][0, day][driver, hour]
 ## Part2: Arrival Locations + Duration
 # We need to find when our drivers arrive and for how long they stay
 
-a = data_ev['Logic710_hr'][0, 0]
+a = data_ev['Logic710_hr'][0, 1]
+
+list_ev = []
+for row in a:
+    idx_row = list(row).index(1)
+    sum_row = np.sum(row)
+    list_ev.append([idx_row, sum_row])
+
