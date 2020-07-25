@@ -58,3 +58,6 @@ Ppv[Ppv > PVRatedPower] = PVRatedPower
 
 # We will scale our data such that the max nominal power is 1
 Ppv = Ppv/Ppv.max()
+
+np.save('2pv.npy', Ppv)
+# Ppv = np.load('2pv.npy')
