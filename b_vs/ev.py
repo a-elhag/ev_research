@@ -41,8 +41,13 @@ for key, lot in data_ev.items():
                     break
             array_ev[idx, day] = np.array(list_ev)
 
+# Remove the first day
+array_ev = array_ev[:, 1:]
+
 np.save('../a_data/b_vs/out/ev.npy', array_ev)
 """
 array_ev[parking_lot, day][driver, 0] ==> Arrival
 array_ev[parking_lot, day][driver, 1] ==> Duration
 """
+
+
