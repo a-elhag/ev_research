@@ -28,6 +28,8 @@ for year in range(array_ev.shape[0]):
 
         rem_count += shape1-shape2
 
+np.save('../a_data/b_vs/out/ev_clean.npy', array_ev)
+
 # print(rem_count)
 # print(total_count)
-# print(rem_count/total_count)
+# print(rem_count/total_count) # ~ 20.6% 
