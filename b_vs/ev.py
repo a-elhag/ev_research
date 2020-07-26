@@ -41,8 +41,6 @@ for key, lot in data_ev.items():
                     break
             array_ev[idx, day] = np.array(list_ev)
 
-# Remove the first day
-array_ev = array_ev[:, 1:]
 
 np.save('../a_data/b_vs/out/ev.npy', array_ev)
 """

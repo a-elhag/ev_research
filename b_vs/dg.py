@@ -115,4 +115,3 @@ virtual_DG = virtual_DG[:, :hours_simu]
 
 ## Part 4: Verification
 plt.plot(virtual_DG.sum(axis=0))
-
