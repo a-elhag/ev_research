@@ -1,2 +1,3 @@
 a_data/b_vs/plots/*.png
+.pytest_cache/*
 
