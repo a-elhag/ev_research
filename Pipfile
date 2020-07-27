@@ -12,6 +12,8 @@ ipython = "*"
 scipy = "*"
 pynvim = "*"
 psutil = "*"
+pytest = "*"
+ipdb = "*"
 
 [requires]
 python_version = "3.8"
