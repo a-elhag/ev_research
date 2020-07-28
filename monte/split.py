@@ -49,12 +49,17 @@ class SplitRenewables():
                                              axis=1, mode='wrap')
 
     def hour_split(self):
-        self.seasons_hours = np.empty((4, 24), object)
+        self.data_out = np.empty((4, 24), object)
 
         for season in range(4):
             for hour in range(24):
-                self.seasons_hours[season, hour] = \
+                self.data_out[season, hour] = \
                 self.seasons[season][:, hour::24].flatten()
+
+    def run(self):
+        self.season_range()
+        self.season_split()
+        self.hour_split()
 
 
 array_ev_clean = np.load('../data/preprocessing/ev_clean.npy', allow_pickle=True)
@@ -62,11 +67,7 @@ Ppv = np.load('../data/preprocessing/pv.npy')
 Pwt = np.load('../data/preprocessing/wt.npy')
 
 split_pv = SplitRenewables(Ppv)
-split_pv.season_range()
-split_pv.season_split()
-split_pv.hour_split()
+split_pv.run()
 
 split_wt = SplitRenewables(Pwt)
-split_wt.season_range()
-split_wt.season_split()
-split_wt.hour_split()
+split_wt.run()
