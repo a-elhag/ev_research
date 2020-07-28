@@ -9,7 +9,7 @@ if current_dir[-4:] == 'test':
 
 
 def test_original_ev():
-    array_ev = np.load('a_data/b_vs/out/ev.npy', allow_pickle=True)
+    array_ev = np.load('data/preprocessing/ev.npy', allow_pickle=True)
     assert array_ev.shape == (6, 366)
 
 
