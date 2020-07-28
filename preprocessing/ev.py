@@ -48,4 +48,4 @@ np.save('../data/preprocessing/ev.npy', array_ev)
 array_ev[parking_lot, day][driver, 0] ==> Arrival
 array_ev[parking_lot, day][driver, 1] ==> Duration
 """
-
+print('hello')
