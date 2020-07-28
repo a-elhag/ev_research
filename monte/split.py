@@ -1,7 +1,7 @@
 import datetime as dt
 import numpy as np
 
-array_ev = np.load('../data/preprocessing/ev.npy', allow_pickle=True)
+array_ev_clean = np.load('../data/preprocessing/ev_clean.npy', allow_pickle=True)
 Ppv = np.load('../data/preprocessing/pv.npy')
 Pwt = np.load('../data/preprocessing/wt.npy')
 
@@ -77,19 +77,16 @@ class Split():
                     self.seasons[season][:, hour::24].flatten()
 
 
-
+split_pv = Split(Ppv)
+split_pv.season_range()
+split_pv.season_split()
+split_pv.hour_split()
 
 split_wt = Split(Pwt)
 split_wt.season_range()
 split_wt.season_split()
 split_wt.hour_split()
 
-split_pv = Split(Ppv)
-split_pv.season_range()
-split_pv.season_split()
-split_pv.hour_split()
-
-split_ev = Split(array_ev, True)
+split_ev = Split(array_ev_clean, True)
 split_ev.season_range()
 split_ev.season_split()
-
