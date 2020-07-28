@@ -1,10 +1,6 @@
 import datetime as dt
 import numpy as np
 
-array_ev_clean = np.load('../data/preprocessing/ev_clean.npy', allow_pickle=True)
-Ppv = np.load('../data/preprocessing/pv.npy')
-Pwt = np.load('../data/preprocessing/wt.npy')
-
 class Split():
     """ Split data to seasons, hours and/or weekends/days """
 
@@ -76,6 +72,10 @@ class Split():
                     self.seasons_hours[season, hour] = \
                     self.seasons[season][:, hour::24].flatten()
 
+
+array_ev_clean = np.load('../data/preprocessing/ev_clean.npy', allow_pickle=True)
+Ppv = np.load('../data/preprocessing/pv.npy')
+Pwt = np.load('../data/preprocessing/wt.npy')
 
 split_pv = Split(Ppv)
 split_pv.season_range()
