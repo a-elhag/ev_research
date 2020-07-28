@@ -1,12 +1,11 @@
 import datetime as dt
 import numpy as np
 
-class Split():
-    """ Split data to seasons, hours and/or weekends/days """
+class SplitRenewables():
+    """ Split PV and WT seasons & hours """
 
-    def __init__(self, data, ev_flag = False):
-        self.data = data
-        self.ev_flag = ev_flag
+    def __init__(self, data_in):
+        self.data_in = data_in
 
         """
         Season 1 (Winter): Dec21-Mar19 || (89 Days)
@@ -35,58 +34,39 @@ class Split():
         self.day1 = self.day1.days + 1
         self.hour1 = self.day1*24
 
-        if self.ev_flag:
-            self.seasons_range = np.empty((4), object)
-            self.seasons_range[0] = np.array(range(self.day1, self.day_no(1)))
-            self.seasons_range[1] = np.array(range(self.day_no(1), self.day_no(2)))
-            self.seasons_range[2] = np.array(range(self.day_no(2), self.day_no(3)))
-            self.seasons_range[3] = np.array(range(self.day_no(3), self.day_no(4)))
-        else:
-            self.seasons_range = np.empty((4), object)
-            self.seasons_range[0] = np.array(range(self.hour1, self.hour_no(1)))
-            self.seasons_range[1] = np.array(range(self.hour_no(1), self.hour_no(2)))
-            self.seasons_range[2] = np.array(range(self.hour_no(2), self.hour_no(3)))
-            self.seasons_range[3] = np.array(range(self.hour_no(3), self.hour_no(4)))
+        self.seasons_range = np.empty((4), object)
+        self.seasons_range[0] = np.array(range(self.hour1, self.hour_no(1)))
+        self.seasons_range[1] = np.array(range(self.hour_no(1), self.hour_no(2)))
+        self.seasons_range[2] = np.array(range(self.hour_no(2), self.hour_no(3)))
+        self.seasons_range[3] = np.array(range(self.hour_no(3), self.hour_no(4)))
 
 
     def season_split(self):
         self.seasons = np.empty((4), object)
 
-        if self.ev_flag:
-            for _ in range(4):
-                self.seasons[_] = self.data.take(self.seasons_range[_],
-                                                 axis=1, mode='wrap')
-        else:
-            for _ in range(4):
-                self.seasons[_] = self.data.take(self.seasons_range[_],
-                                                 axis=1, mode='wrap')
+        for _ in range(4):
+            self.seasons[_] = self.data_in.take(self.seasons_range[_],
+                                             axis=1, mode='wrap')
 
     def hour_split(self):
         self.seasons_hours = np.empty((4, 24), object)
 
-        if self.ev_flag:
-            pass
-        else:
-            for season in range(4):
-                for hour in range(24):
-                    self.seasons_hours[season, hour] = \
-                    self.seasons[season][:, hour::24].flatten()
+        for season in range(4):
+            for hour in range(24):
+                self.seasons_hours[season, hour] = \
+                self.seasons[season][:, hour::24].flatten()
 
 
 array_ev_clean = np.load('../data/preprocessing/ev_clean.npy', allow_pickle=True)
 Ppv = np.load('../data/preprocessing/pv.npy')
 Pwt = np.load('../data/preprocessing/wt.npy')
 
-split_pv = Split(Ppv)
+split_pv = SplitRenewables(Ppv)
 split_pv.season_range()
 split_pv.season_split()
 split_pv.hour_split()
 
-split_wt = Split(Pwt)
+split_wt = SplitRenewables(Pwt)
 split_wt.season_range()
 split_wt.season_split()
 split_wt.hour_split()
-
-split_ev = Split(array_ev_clean, True)
-split_ev.season_range()
-split_ev.season_split()

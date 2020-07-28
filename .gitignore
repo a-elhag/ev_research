@@ -1,3 +1,4 @@
-a_data/b_vs/plots/*.png
+data/pics/plots/*
+data/split/*
 .pytest_cache/*
 

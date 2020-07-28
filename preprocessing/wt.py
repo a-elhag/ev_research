@@ -58,6 +58,7 @@ pow_edges_wt = np.r_[0, pow_edges_wt]
 Pwt = np.digitize(wind, edges_wt) # Power Wind Turbine
 Pwt = pow_edges_wt[Pwt]
 
+Pwt = Pwt/Pwt[:,:].max()
 np.save('../data/preprocessing/wt.npy', Pwt)
 
 """
