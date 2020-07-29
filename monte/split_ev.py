@@ -2,7 +2,6 @@ import datetime as dt
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 array_ev_clean = np.load('../data/preprocessing/ev_clean.npy', allow_pickle=True)
 
 
@@ -10,19 +9,10 @@ wday = np.arange(0,5)
 
 split_ev = np.empty((4,1), object)
 
-wday_count = 0; wend_count = 0
-date_idx = dt.date(2012, 1, 1)
-while date_idx.year != 2013:
-    if date_idx.weekday() in wday:
-        wday_count += 1
-    else:
-        wend_count += 1
-    date_idx += dt.timedelta(days=1)
-
 for lot in range(4):
     split_ev[lot, 0] = np.empty((1,2), object)
-    split_ev[lot, 0][0, 0] = np.empty((1, wday_count), object)
-    split_ev[lot, 0][0, 1] = np.empty((1, wend_count), object)
+    split_ev[lot, 0][0, 0] = np.empty((1, 2), object)
+    split_ev[lot, 0][0, 1] = np.empty((1, 2), object)
 
 """
 split_ev[lot, 0][0, Wday?][0, day]
@@ -55,18 +45,25 @@ def plot_ev(array, fig, ax, wday, lot, count):
 #                     fig, ax, False, lot, wend_count)
 
 for lot in range(4):
-    wday_count = 0; wend_count = 0; day_count=0
+    day_count=0
     date_idx = dt.date(2012, 1, 1)
+    list_day_arr = []
+    list_day_dur = []
+    list_end_arr = []
+    list_end_dur = []
     while date_idx.year != 2013:
+        print(date_idx)
         # Return day of the week, where Monday == 0 ... Sunday == 6
+        if array_ev_clean[lot, day_count].size == 0:
+            day_count += 1
+            date_idx += dt.timedelta(days=1)
+            continue
         if date_idx.weekday() in wday:
-            split_ev[lot, 0][0, 0][0, wday_count] = \
-                    array_ev_clean[lot, day_count]
-
-            wday_count += 1
+            list_day_arr.extend(array_ev_clean[lot, day_count][:, 0].tolist())
+            list_day_dur.extend(array_ev_clean[lot, day_count][:, 1].tolist())
         else:
-            split_ev[lot, 0][0, 1][0, wend_count] = \
-                    array_ev_clean[lot, day_count]
-            wend_count += 1
+            list_end_arr.extend(array_ev_clean[lot, day_count][:, 0].tolist())
+            list_end_dur.extend(array_ev_clean[lot, day_count][:, 1].tolist())
         day_count += 1
         date_idx += dt.timedelta(days=1)
+
