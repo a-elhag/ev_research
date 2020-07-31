@@ -21,14 +21,13 @@ def timing(func):
         func(*args, **kwargs)
         end_time = time.time() - start_time
         print(end_time)
-        return end_time
     return wrapper
 
 @timing
-def simple_icdf(x):
-    for _ in range(x):
-        y = np.random.rand(1)
-        np.quantile(split_pv.data_out[2,10], y)
+def simple_icdf(iter):
+    rand = np.random.rand(iter)
+    B = np.quantile(split_pv.data_out[2,10], rand)
+    return B
 
 
-simple_icdf(10*8760)
+PV = simple_icdf(1000*8760)
