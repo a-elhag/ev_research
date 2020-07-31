@@ -3,7 +3,7 @@ import datetime as dt
 import matplotlib.pyplot as plt
 import numpy as np
 
-array_ev = np.load('../data/preprocessing/ev.npy', allow_pickle = True)
+array_ev = np.load('../../preprocessing/ev.npy', allow_pickle = True)
 
 
 def what_day(day):
@@ -29,6 +29,6 @@ for lot in range(array_ev.shape[0]):
         ax[lot, day].scatter(x, array_ev[lot, day][:,0] + array_ev[lot, day][:,1], label='Duration')
         ax[lot, day].set_title(f"Lot: {lot}, Day: {day_name}, {date_num}")
         ax[lot, day].legend()
-        fig[lot, day].savefig(f'../a_data/b_vs/plots/L{lot}-D{day}.png', dpi=150, bbox_inches='tight')
+        fig[lot, day].savefig(f'L{lot}-D{day}.png', dpi=150, bbox_inches='tight')
         plt.close(fig[lot, day])
 

@@ -48,4 +48,9 @@ np.save('../data/preprocessing/ev.npy', array_ev)
 array_ev[parking_lot, day][driver, 0] ==> Arrival
 array_ev[parking_lot, day][driver, 1] ==> Duration
 """
-print('hello')
+
+# Cleaning
+idx = np.array([0, 1, 3, 4])
+array_ev_clean = array_ev[idx, :]
+
+np.save('../data/preprocessing/ev_clean.npy', array_ev_clean)
