@@ -2,7 +2,12 @@ import datetime as dt
 import numpy as np
 
 class SplitRenewables():
-    """ Split PV and WT seasons & hours """
+    """
+    Split PV and WT seasons & hours
+    data_out[season, hour]
+    season ==> 0:4
+    hour ==> 0:24
+    """
 
     def __init__(self, data_in):
         self.data_in = data_in
