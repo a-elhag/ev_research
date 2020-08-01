@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import loadmat
 
@@ -49,26 +50,11 @@ class WT:
         self.pow_edges_wt = np.r_[0, self.pow_edges_wt] # Placeholder, because bins is always less by one of the edges
 
     def power_output(self):
-        """
-        Because of the fact that there are days with clouds and days without, we have a
-        two humped shape to our distribution. Making it difficult to model. Thus to
-        simplify it, we will convert the solar irradiance and temperature into power!
+        self.Pwt = np.digitize(self.wind, self.edges_wt) # Power Wind Turbine
+        self.Pwt = self.pow_edges_wt[self.Pwt]
+        self.Pwt = self.Pwt/self.Pwt[:,:].max()
 
-        Numpy is row major by default, meaning we have (years, hours).
-
-        Check LN02 - Renewable for formulas
-        """
-        self.Tcell = self.tempX + self.PVdata * (self.NOCT-20)/(0.8)
-        self.Ipv = self.PVdata * (self.Isc + self.Ki*(self.Tcell-25))
-        self.Vpv = self.Voc + self.Kv * (self.Tcell - 25)
-        self.Ppv = self.Ncells * self.FF * self.Vpv * self.Ipv
-
-        # Note: Due to assumed limitations of our PV panels
-        # we will limit the output power to PVRatedPower.
-        self.Ppv[self.Ppv > self.PVRatedPower] = self.PVRatedPower
-
-        # We will scale our data such that the max nominal power is 1
-        self.Ppv = self.Ppv/self.Ppv.max()
+        np.save('../data/preprocessing/wt.npy', self.Pwt)
 
     def run(self):
         self.characteristics()
@@ -78,32 +64,5 @@ class WT:
         np.save(out_location, self.Ppv)
 
 data_location = '../data/in/solar_wind.mat'
-
-my_WT = WT()
-## Part3: Applying Edges
-# Pwt = np.digitize(wind, edges_wt) # Power Wind Turbine
-# Pwt = pow_edges_wt[Pwt]
-# 
-# Pwt = Pwt/Pwt[:,:].max()
-# np.save('../data/preprocessing/wt.npy', Pwt)
-
-"""
-## Part4: Plotting
-plt.subplot(311)
-plt.plot(wind[0,:], label = 'Orig Y1')
-plt.plot(Pwt[0,:], label = 'New Y1')
-plt.legend()
-
-plt.subplot(312)
-plt.plot(wind[1,:], label = 'Orig Y2')
-plt.plot(Pwt[0,:], label = 'New Y2')
-plt.legend()
-
-plt.subplot(313)
-plt.plot(wind[2,:], label = 'Orig Y3')
-plt.plot(Pwt[0,:], label = 'New Y3')
-plt.legend()
-
-plt.show()
-"""
-
+my_WT = WT(data_location)
+my_WT.run()
