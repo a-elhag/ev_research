@@ -18,9 +18,10 @@ bins_wt = np.empty((4,24), object)
 def timing(func):
     def wrapper(*args, **kwargs):
         start_time = time.time()
-        func(*args, **kwargs)
+        output = func(*args, **kwargs)
         end_time = time.time() - start_time
         print(end_time)
+        return output
     return wrapper
 
 @timing
