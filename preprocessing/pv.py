@@ -2,16 +2,17 @@
 import numpy as np
 from scipy.io import loadmat
 
-"""
-data:
-'tempX' ==> Temperature
-'PVdata' ==> Solar insolation
-'Wind' ==> Wind speed
-"""
 
 class PV:
     def __init__(self, data_location):
+        """
+        data:
+        'tempX' ==> Temperature
+        'PVdata' ==> Solar insolation
+        'Wind' ==> Wind speed
+        """
         self.data = loadmat(data_location)
+
         self.tempX = self.data['tempX']
         self.tempX = self.tempX.reshape(1, -1)
         self.tempX = np.repeat(self.tempX, 24, axis=1)
