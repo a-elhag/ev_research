@@ -2,38 +2,46 @@
 import numpy as np
 from scipy.io import loadmat
 
-# data ==>
-# dict_keys(['__header__', '__version__', '__globals__',
-# 'tempX', 'PVdata', 'RTS', 'Wind'])
+"""
+data:
+'tempX' ==> Temperature
+'PVdata' ==> Solar insolation
+'Wind' ==> Wind speed
+"""
+
+class PV():
+    def __init__(self, data):
+        self.tempX = data['tempX']
+        self.tempX = self.tempX.reshape(1, -1)
+        self.tempX = np.repeat(self.tempX, 24, axis=1)
+        self.tempX = self.tempX.reshape(1, -1)
+        self.tempX = np.repeat(self.tempX, 6, axis=0)
+
+        self.PVdata = data['PVdata']
+        self.PVdata = self.PVdata.T  # Sir is in W/m**2
+        self.PVdata = self.PVdata/1000  # Now Sir is in kW/m**2
+
+    def characteristics(self):
+        self.NOCT = 45
+        self.Ki = 0.05
+        self.Kv = -0.27  # Kv should always be negative
+
+        self.Isc = 6.43
+        self.Voc = 85.6
+
+        self.Impp = 5.97
+        self.Vmpp = 72.9
+
+        self.FF = (self.Vmpp*self.Impp)/(self.Voc*self.Isc)
+        self.Ncells = 1
+        self.PVRatedPower = 435
+
+    def run(self):
+        self.characteristics()
+
 
 data = loadmat('../data/in/solar_wind.mat')
-tempX = data['tempX']
-PVdata = data['PVdata']
-RTS = data['RTS']
-
-## Part 2: PV Output Power
-NOCT = 45
-Ki = 0.05
-Kv = -0.27  # Kv should always be negative
-
-Isc = 6.43
-Voc = 85.6
-
-Impp = 5.97
-Vmpp = 72.9
-
-FF = (Vmpp*Impp)/(Voc*Isc)
-Ncells = 1
-PVRatedPower = 435
-
 ## Part 3: Fixing Input Data
-tempX = tempX.reshape(1, -1)
-tempX = np.repeat(tempX, 24, axis=1)
-tempX = tempX.reshape(1, -1)
-tempX = np.repeat(tempX, 6, axis=0)
-
-PVdata = PVdata.T  # Sir is in W/m**2
-PVdata = PVdata/1000  # Now Sir is in kW/m**2
 
 ## Part 3: Calculating Power Output
 """
@@ -45,7 +53,7 @@ Numpy is row major by default, meaning we have (years, hours).
 
 Check LN02 - Renewable for formulas
 """
-Tcell = tempX + PVdata * (NOCT-20)/(0.8)
+Tcell = self.tempX + PVdata * (NOCT-20)/(0.8)
 Ipv = PVdata * (Isc + Ki*(Tcell-25))
 Vpv = Voc + Kv * (Tcell - 25)
 Ppv = Ncells * FF * Vpv * Ipv
