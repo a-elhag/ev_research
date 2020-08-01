@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import loadmat
 
@@ -61,8 +60,11 @@ class WT:
         self.power_output()
 
     def save(self, out_location):
-        np.save(out_location, self.Ppv)
+        np.save(out_location, self.Pwt)
 
 data_location = '../data/in/solar_wind.mat'
-my_WT = WT(data_location)
-my_WT.run()
+out_location = '../data/preprocessing/wt.npy'
+
+my_wt = WT(data_location)
+my_wt.run()
+my_wt.save(out_location)
