@@ -53,8 +53,8 @@ def full_icdf(data, years):
                 rand = np.random.rand()
                 out = np.quantile(data[season, hour], rand)
                 idx_hour = hour + day*24
-                out_array[idx_hour, year]
+                out_array[idx_hour, year] = out
 
     return np.array(out_array)
 
-A = full_icdf(split_pv.data_out, 100)
+A = full_icdf(split_wt.data_out, 10)
