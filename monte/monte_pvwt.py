@@ -1,6 +1,9 @@
 import numpy as np
+import io
 from split_pvwt import SplitRenewables
+import sqlite3
 import time
+
 
 Ppv = np.load('../data/preprocessing/pv.npy')
 Pwt = np.load('../data/preprocessing/wt.npy')
@@ -57,4 +60,44 @@ def full_icdf(data, years):
 
     return np.array(out_array)
 
-A = full_icdf(split_wt.data_out, 10)
+A = full_icdf(split_wt.data_out, 1)
+
+## SQLite3
+
+def adapt_array(arr):
+    """
+    http://stackoverflow.com/a/31312102/190597 (SoulNibbler)
+    """
+    out = io.BytesIO()
+    np.save(out, arr)
+    out.seek(0)
+    return sqlite3.Binary(out.read())       
+                                            
+def convert_array(text):                    
+    out = io.BytesIO(text)                  
+    out.seek(0)                             
+    return np.load(out)                     
+                                            
+
+# Converts np.array to TEXT when inserting
+sqlite3.register_adapter(np.ndarray, adapt_array)
+
+# Converts TEXT to np.array when selecting
+sqlite3.register_converter("array", convert_array)
+
+conn = sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES)
+cursor = conn.cursor()
+cursor.execute("CREATE table test (arr array)")
+
+cursor.execute("INSERT into test (arr) values (?)", (A, ))
+cursor.execute("INSERT into test (arr) values (?)", (-A, ))
+
+cursor.execute("SELECT arr from test")
+
+data = cursor.fetchall()
+
+# conn.commit()
+
+# conn.close()
+print(data)
+print(type(data))
