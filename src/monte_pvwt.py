@@ -4,7 +4,6 @@ from split_pvwt import SplitRenewables
 import sqlite3
 import time
 
-
 Ppv = np.load('../data/preprocessing/pv.npy')
 Pwt = np.load('../data/preprocessing/wt.npy')
 
