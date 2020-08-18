@@ -33,12 +33,13 @@ class SQL_Numpy():
 
     def first_select(self):
         self.cursor.execute("SELECT arr FROM data LIMIT 1")
-        self.data = self.cursor.fetchall()
-
-    def first_delete(self):
+        self.data = self.cursor.fetchall()           
+        self.data = self.data[0][0]           
+                                                     
+    def first_delete(self):                          
         self.cursor.execute("""DELETE FROM data WHERE id in (
-            SELECT id FROM data LIMIT 1)""")
-
+            SELECT id FROM data LIMIT 1)""")         
+                                                     
     def commit(self):
         self.conn.commit()
 
@@ -49,6 +50,7 @@ if __name__ == "__main__":
     x = np.random.rand(10)
 
     x_sql = SQL_Numpy("test.db")
+    x_sql.insert(x)
     x_sql.insert(x)
 
     x_sql.first_select()                        

@@ -19,7 +19,7 @@ pv_sql = SQL_Numpy('pv.db')
 pv_sql.insert(pv_gen)
 
 pv_sql.first_select()
-print(pv_sql.data)
+print(pv_sql.shape)
 
 pv_sql.commit()
 pv_sql.close()
