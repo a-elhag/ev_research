@@ -13,4 +13,14 @@ pv_split = SplitRenewables(pv_data)
 pv_split.run()
 #pv_split.data_out
 
-pv_gen = full_icdf(pv_split.data_out, 20)
+pv_gen = full_icdf(pv_split.data_out, 1)
+
+pv_sql = SQL_Numpy('pv.db')
+pv_sql.insert(pv_gen)
+
+pv_sql.first_select()
+print(pv_sql.data)
+
+pv_sql.commit()
+pv_sql.close()
+

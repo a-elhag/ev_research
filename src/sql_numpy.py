@@ -45,14 +45,15 @@ class SQL_Numpy():
     def close(self):
         self.conn.close()
 
-if __name__ = "__main__":
-    x = np.random.rand(8760)
+if __name__ == "__main__":
+    x = np.random.rand(10)
 
     x_sql = SQL_Numpy("test.db")
-    # x_sql.insert(x)
+    x_sql.insert(x)
 
     x_sql.first_select()                        
-    print(x_sql.data)                           
+    print(x_sql.data)
     x_sql.first_delete()                        
     x_sql.commit()                              
     x_sql.close()                               
+
