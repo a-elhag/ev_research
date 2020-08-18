@@ -4,22 +4,6 @@ from split_pvwt import SplitRenewables
 import sqlite3
 import time
 
-Ppv = np.load('../data/preprocessing/pv.npy')
-Pwt = np.load('../data/preprocessing/wt.npy')
-
-split_pv = SplitRenewables(Ppv)
-split_pv.run() # split_pv.data_out
-
-split_wt = SplitRenewables(Pwt)
-split_wt.run() # split_wt.data_out
-
-def simple_icdf(iter):
-    rand = np.random.rand(iter)
-    B = np.quantile(split_pv.data_out[2,10], rand)
-    return B
-
-PV = simple_icdf(1000*8760)
-
 """
 Season 1 (Winter): Dec21-Mar19 || (89 Days)
 Season 2 (Spring): Mar20-Jun20 || (93 Days)
@@ -38,6 +22,11 @@ def timing(func):
         print(end_time)
         return output
     return wrapper
+
+def simple_icdf(iter):
+    rand = np.random.rand(iter)
+    B = np.quantile(split_pv.data_out[2,10], rand)
+    return B
 
 @timing
 def full_icdf(data, years):
@@ -59,44 +48,17 @@ def full_icdf(data, years):
 
     return np.array(out_array)
 
-A = full_icdf(split_wt.data_out, 1)
+if __name__ == "__main__":
+    Ppv = np.load('../data/preprocessing/pv.npy')
+    Pwt = np.load('../data/preprocessing/wt.npy')
 
-## SQLite3
+    split_pv = SplitRenewables(Ppv)
+    split_pv.run() # split_pv.data_out
 
-def adapt_array(arr):
-    """
-    http://stackoverflow.com/a/31312102/190597 (SoulNibbler)
-    """
-    out = io.BytesIO()
-    np.save(out, arr)
-    out.seek(0)
-    return sqlite3.Binary(out.read())       
-                                            
-def convert_array(text):                    
-    out = io.BytesIO(text)                  
-    out.seek(0)                             
-    return np.load(out)                     
-                                            
+    split_wt = SplitRenewables(Pwt)
+    split_wt.run() # split_wt.data_out
 
-# Converts np.array to TEXT when inserting
-sqlite3.register_adapter(np.ndarray, adapt_array)
 
-# Converts TEXT to np.array when selecting
-sqlite3.register_converter("array", convert_array)
+    PV = simple_icdf(1000*8760)
+    A = full_icdf(split_wt.data_out, 1)
 
-conn = sqlite3.connect(":memory:", detect_types=sqlite3.PARSE_DECLTYPES)
-cursor = conn.cursor()
-cursor.execute("CREATE table test (arr array)")
-
-cursor.execute("INSERT into test (arr) values (?)", (A, ))
-cursor.execute("INSERT into test (arr) values (?)", (-A, ))
-
-cursor.execute("SELECT arr from test")
-
-data = cursor.fetchall()
-
-# conn.commit()
-
-# conn.close()
-print(data)
-print(type(data))
