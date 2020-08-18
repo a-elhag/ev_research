@@ -1,7 +1,5 @@
 import datetime as dt
-import ipdb
 import numpy as np
-dbg1 = ipdb.set_trace  # BREAKPOINT
 
 ev_clean = np.load('../data/preprocessing/ev_clean.npy',
                          allow_pickle=True)
