@@ -16,11 +16,11 @@ pv_split.run()
 pv_gen = full_icdf(pv_split.data_out, 1)
 
 pv_sql = SQL_Numpy('pv.db')
-pv_sql.insert(pv_gen)
-
-pv_sql.first_select()
-print(pv_sql.shape)
-
-pv_sql.commit()
-pv_sql.close()
-
+pv_sql.connect()
+pv_sql.insert(pv_gen)                              
+                                                   
+pv_sql.first_select()                              
+                                                   
+pv_sql.commit()                                    
+pv_sql.close()                                     
+                                                   

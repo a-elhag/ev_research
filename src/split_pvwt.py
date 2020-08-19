@@ -66,11 +66,13 @@ class SplitRenewables():
         self.season_split()
         self.hour_split()
 
-# Ppv = np.load('../data/preprocessing/pv.npy')
-# Pwt = np.load('../data/preprocessing/wt.npy')
-# 
-# split_pv = SplitRenewables(Ppv)
-# split_pv.run()
-# 
-# split_wt = SplitRenewables(Pwt)
-# split_wt.run()
+
+if __name__ == "__main__":
+    Ppv = np.load('../data/preprocessing/pv.npy')
+    Pwt = np.load('../data/preprocessing/wt.npy')
+
+    split_pv = SplitRenewables(Ppv)
+    split_pv.run()
+
+    split_wt = SplitRenewables(Pwt)
+    split_wt.run()

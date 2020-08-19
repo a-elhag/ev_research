@@ -23,12 +23,13 @@ def timing(func):
         return output
     return wrapper
 
+@timing
 def simple_icdf(iter):
     rand = np.random.rand(iter)
     B = np.quantile(split_pv.data_out[2,10], rand)
     return B
 
-@timing
+# @timing
 def full_icdf(data, years):
     out_array = np.zeros((8760, years))
     for year in range(years):
