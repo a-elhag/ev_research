@@ -11,24 +11,26 @@ class SQL_Numpy():
         sqlite3.register_converter("array", self.convert_array)
 
         self.db_name = db_name
+        
+    def adapt_array(self, arr):
+        out = io.BytesIO()
+        np.save(out, arr)
+        out.seek(0)
+        return sqlite3.Binary(out.read())          
+                                                   
+    def convert_array(self, text):                   
+        out = io.BytesIO(text)                       
+        out.seek(0)                                  
+        return np.load(out)                          
+                                                     
+    def connect(self):
         self.conn = sqlite3.connect(self.db_name, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cursor = self.conn.cursor()
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS data (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         arr ARRAY);""")
 
-    def adapt_array(self, arr):
-        out = io.BytesIO()
-        np.save(out, arr)
-        out.seek(0)
-        return sqlite3.Binary(out.read())
-
-    def convert_array(self, text):
-        out = io.BytesIO(text)
-        out.seek(0)
-        return np.load(out)
-
-    def insert(self, arr):
+    def insert(self, arr):                           
         self.cursor.execute("INSERT INTO data (arr) values (?)", (arr, ))
 
     def first_select(self):
@@ -50,6 +52,7 @@ if __name__ == "__main__":
     x = np.random.rand(10)
 
     x_sql = SQL_Numpy("test.db")
+    x_sql.connect()
     x_sql.insert(x)
     x_sql.insert(x)
 
