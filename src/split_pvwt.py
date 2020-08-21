@@ -68,8 +68,8 @@ class SplitRenewables():
 
 
 if __name__ == "__main__":
-    Ppv = np.load('../data/preprocessing/pv.npy')
-    Pwt = np.load('../data/preprocessing/wt.npy')
+    Ppv = np.load('data/preprocessing/pv.npy')
+    Pwt = np.load('data/preprocessing/wt.npy')
 
     split_pv = SplitRenewables(Ppv)
     split_pv.run()

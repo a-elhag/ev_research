@@ -2,4 +2,4 @@ data/pics/plots/*
 data/split/*
 .pytest_cache/*
 *.pyc
-monte/__pycache__
+*.db
