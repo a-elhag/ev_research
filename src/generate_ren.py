@@ -6,7 +6,7 @@ from split_pvwt import SplitRenewables
 from sql_numpy import SQL_Numpy
 
 ## Part 2: Making Class
-class Generate():
+class GenerateRen():
     def __init__(self, data_loc, db_loc):
         self.db_loc = db_loc
         self.data_loc = data_loc
@@ -48,15 +48,16 @@ class Generate():
         plt.legend()
         plt.show()
 
+## Part 3: Makig Class
 
 ## Part 3: Running
 if __name__ == "__main__":
-    pv_gen = Generate('data/preprocessing/pv.npy', 'data/db/pv.db')
+    pv_gen = GenerateRen('data/preprocessing/pv.npy', 'data/db/pv.db')
     for year in range(1, 3):
         pv_gen.monte(year)
     pv_gen.yank()
 
-    wt_gen = Generate('data/preprocessing/wt.npy', 'data/db/wt.db')
+    wt_gen = GenerateRen('data/preprocessing/wt.npy', 'data/db/wt.db')
     for year in range(1, 3):
         wt_gen.monte(year)
     wt_gen.yank()
