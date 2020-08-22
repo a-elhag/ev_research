@@ -28,12 +28,26 @@ class Generate():
         self.sql.insert(self.data_gen)
         self.sql_commit_close()
 
-    def yank(self, rows=1):
+    def yank(self, rows=1, delete=True):
         self.sql_connect()
         self.sql.first_select(rows)
         self.data_out = self.sql.data
-        self.sql.first_delete()
+        if delete:
+            self.sql.first_delete()
         self.sql_commit_close()
+
+    def plot(self, max=4):
+        years = self.data_out.shape[0]
+
+        if years>max:
+            years=max
+
+        for year in range(years):
+            plt.plot(self.data_out[year, :], label=year)
+
+        plt.legend()
+        plt.show()
+
 
 ## Part 3: Running
 if __name__ == "__main__":
@@ -41,3 +55,9 @@ if __name__ == "__main__":
     for year in range(1, 3):
         pv_gen.monte(year)
     pv_gen.yank()
+
+    wt_gen = Generate('data/preprocessing/wt.npy', 'data/db/wt.db')
+    for year in range(1, 3):
+        wt_gen.monte(year)
+    wt_gen.yank()
+    # wt_gen.plot()
