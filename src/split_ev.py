@@ -1,16 +1,29 @@
 import datetime as dt
 import numpy as np
 
-ev_clean = np.load('../data/preprocessing/ev_clean.npy',
+ev_clean = np.load('data/preprocessing/ev.npy',
                          allow_pickle=True)
 """
-ev_clean_split[lot, wday][0, hour]
+ev_clean_split[lot, wday][arr/dur, hour]
 lot ==> 0:4
 wday ==> 0 if Weekday and 1 if Weekend
+=============
+arr/dur ==> 0 if arrival and 1 if duration
 hour ==> 0:24
 """
 
+"""
+ev_split[lot, wday/wend][arr/dur, hour]
 
+* arr/dur == 0 (arrival)
+    each hour has the sum of arrivals per hour for all the days of the year
+
+* arr/dur == 1 (duration)
+    each hour has a list of drivers and how long they stayed for in that
+    time split
+
+ev_split[0,0][0,10].sum() == ev_split[0,0][1,10].shape
+"""
 
 ev_arr = np.empty((4, 366), object)
 ev_dur = np.empty((4, 366), object)
@@ -74,4 +87,5 @@ for lot in range(4):
                 ev_split[lot, 1][1, hour] = np.hstack(
                     (ev_split[lot, 1][1, hour], array_dur))
 
-np.save('../data/preprocessing/ev_split.npy', ev_split)
+np.save('data/preprocessing/ev_split.npy', ev_split)
+

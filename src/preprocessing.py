@@ -30,7 +30,7 @@ class EV():
         self.ev_parse = np.empty((6, 366), object)
 
         idx = -1
-        for key, lot in self.data.items():
+        for _, lot in self.data.items():
             if type(lot).__module__ == np.__name__:
                 idx += 1
                 for day in range(lot.shape[1]):
@@ -179,3 +179,27 @@ class WT:
 
     def save(self, out_location):
         np.save(out_location, self.Pwt)
+
+if __name__ == "__main__":
+    ev_in = 'data/in/parking_lot.mat'
+    ev_out = 'data/preprocessing/ev.npy'
+
+    my_ev = EV(ev_in)
+    my_ev.run()
+    my_ev.save(ev_out)
+
+
+    pv_in = 'data/in/solar_wind.mat'
+    pv_out = 'data/preprocessing/pv.npy'
+
+    my_pv = PV(pv_in)
+    my_pv.run()
+    my_pv.save(pv_out)
+
+
+    wt_in = 'data/in/solar_wind.mat'
+    wt_out = 'data/preprocessing/wt.npy'
+
+    my_wt = WT(wt_in)
+    my_wt.run()
+    my_wt.save(wt_out)
