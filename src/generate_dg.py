@@ -2,7 +2,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-## Part 1: Class
 class GenerateDG():
     def __init__(self):
         self.characteristics()
@@ -42,7 +41,7 @@ class GenerateDG():
         self.MTTF = self.MTTF.reshape(-1, 1)
         self.MTTR = self.MTTR.reshape(-1, 1)
 
-    def monte(self, years)
+    def monte(self, years):
         # Variables
         years_simu = 0
         xtra_mul = 1.1
@@ -52,7 +51,7 @@ class GenerateDG():
         iter with an extra multiplier. If more is indeed needed, then the
         multiplier is mulitplied by 1.1. Until the condition is satisified
         """
-        while years_count>=years_simu:
+        while years>=years_simu:
             """
             This while loop generates our VS for DG. It is through the following steps:
 
@@ -67,7 +66,7 @@ class GenerateDG():
                to simulate for.
             """
             # How many fails to generate
-            fails = np.ceil(xtra_mul*years_count*8760/MTTF.min())
+            fails = np.ceil(xtra_mul*years*8760/self.MTTF.min())
             fails = fails.astype(int)
 
             # Generating fails + repairs
@@ -81,36 +80,34 @@ class GenerateDG():
             TTF = np.round(-MTTF_Rep*np.log(R1))
             TTR = np.round(-MTTR_Rep*np.log(R2))
 
-            hours_sim =TTF.sum(1)+TTR.sum(1)
+            hours_sim = TTF.sum(1)+TTR.sum(1)
             hours_sim = hours_sim.min()
             years_simu = np.floor(hours_sim/8760)
 
             xtra_mul = xtra_mul*1.1
 
+        cap_rep = np.tile(self.Cap.astype('i2'), (1, years*8760))
+        total_time = TTF.sum(axis=1) + TTR.sum(axis=1)
+        total_time = total_time.astype('i4')
+        self.data_out = np.ones((32, total_time.max()), dtype=int)
+
+        for DG in range(32):
+            idx_tot = 0
+            for idx in range(TTF.shape[1]):
+                idx1 = idx_tot + TTF[DG, idx]
+                idx2 = idx1 + TTR[DG, idx]
+                idx1 = idx1.astype('i4')
+                idx2 = idx2.astype('i4')
+                self.data_out[DG, idx1:idx2] = 0
+                idx_tot += TTF[DG, idx] + TTR[DG, idx]
+
+        hours_simu = 8760 * years_simu
+        hours_simu = hours_simu.astype('i')
+        self.data_out = self.data_out[:, :hours_simu]
+
 
 
 dg_gen = GenerateDG()
+dg_gen.monte(10)
 
-## Part 2: End
-cap_rep = np.tile(Cap.astype('i2'), (1, years_count*8760))
-total_time = TTF.sum(axis=1) + TTR.sum(axis=1)
-total_time = total_time.astype('i4')
-virtual_DG = np.ones((32, total_time.max()), dtype=int)
 
-for DG in range(32):
-    idx_tot = 0
-    for idx in range(TTF.shape[1]):
-        idx1 = idx_tot + TTF[DG, idx]
-        idx2 = idx1 + TTR[DG, idx]
-        idx1 = idx1.astype('i4')
-        idx2 = idx2.astype('i4')
-        virtual_DG[DG, idx1:idx2] = 0
-        idx_tot += TTF[DG, idx] + TTR[DG, idx]
-
-hours_simu = 8760 * years_simu
-hours_simu = hours_simu.astype('i')
-virtual_DG = virtual_DG[:, :hours_simu]
-
-## Part 4: Verification
-plt.plot(virtual_DG.sum(axis=0))
-plt.show()
