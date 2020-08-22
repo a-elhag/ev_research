@@ -33,14 +33,18 @@ class SQL_Numpy():
     def insert(self, arr):                           
         self.cursor.execute("INSERT INTO data (arr) values (?)", (arr, ))
 
-    def first_select(self):
-        self.cursor.execute("SELECT arr FROM data LIMIT 1")
+    def first_select(self, rows=1):
+        self.rows = rows
+        self.cursor.execute(f"SELECT arr FROM data LIMIT {self.rows}")
         self.data = self.cursor.fetchall()           
-        self.data = self.data[0][0]           
+        try:
+            self.data = self.data[0][0]           
+        except IndexError:
+            pass
                                                      
     def first_delete(self):                          
-        self.cursor.execute("""DELETE FROM data WHERE id in (
-            SELECT id FROM data LIMIT 1)""")         
+        self.cursor.execute(f"""DELETE FROM data WHERE id in (
+            SELECT id FROM data LIMIT {self.rows})""")         
                                                      
     def commit(self):
         self.conn.commit()

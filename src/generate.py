@@ -28,9 +28,9 @@ class Generate():
         self.sql.insert(self.data_gen)
         self.sql_commit_close()
 
-    def yank(self):
+    def yank(self, rows=1):
         self.sql_connect()
-        self.sql.first_select()
+        self.sql.first_select(rows)
         self.data_out = self.sql.data
         self.sql.first_delete()
         self.sql_commit_close()
@@ -38,6 +38,6 @@ class Generate():
 ## Part 3: Running
 if __name__ == "__main__":
     pv_gen = Generate('data/preprocessing/pv.npy', 'data/db/pv.db')
-    for year in range(1, 5):
+    for year in range(1, 3):
         pv_gen.monte(year)
     pv_gen.yank()
