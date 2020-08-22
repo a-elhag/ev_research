@@ -1,9 +1,11 @@
 ## Part 0: Importing
 import numpy as np
 import matplotlib.pyplot as plt
+from sql_numpy import SQL_Numpy
 
 class GenerateDG():
-    def __init__(self):
+    def __init__(self, db_loc):
+        self.db_loc = db_loc
         self.characteristics()
 
     def mat2num(self, s):
@@ -40,6 +42,14 @@ class GenerateDG():
         self.Cap = self.Cap.reshape(-1, 1)
         self.MTTF = self.MTTF.reshape(-1, 1)
         self.MTTR = self.MTTR.reshape(-1, 1)
+
+    def sql_connect(self):
+        self.sql = SQL_Numpy(self.db_loc)
+        self.sql.connect()
+
+    def sql_commit_close(self):
+        self.sql.commit()
+        self.sql.close()
 
     def monte(self, years):
         # Variables
@@ -89,7 +99,7 @@ class GenerateDG():
         cap_rep = np.tile(self.Cap.astype('i2'), (1, years*8760))
         total_time = TTF.sum(axis=1) + TTR.sum(axis=1)
         total_time = total_time.astype('i4')
-        self.data_out = np.ones((32, total_time.max()), dtype=int)
+        self.data_gen = np.ones((32, total_time.max()), dtype=int)
 
         for DG in range(32):
             idx_tot = 0
@@ -98,16 +108,41 @@ class GenerateDG():
                 idx2 = idx1 + TTR[DG, idx]
                 idx1 = idx1.astype('i4')
                 idx2 = idx2.astype('i4')
-                self.data_out[DG, idx1:idx2] = 0
+                self.data_gen[DG, idx1:idx2] = 0
                 idx_tot += TTF[DG, idx] + TTR[DG, idx]
 
-        hours_simu = 8760 * years_simu
-        hours_simu = hours_simu.astype('i')
-        self.data_out = self.data_out[:, :hours_simu]
+        hours_simu = 8760 * years
+        self.data_gen = self.data_gen[:, -hours_simu:]
+        ## Final Calculations
+        self.data_gen = self.data_gen*cap_rep
+        self.data_gen = self.data_gen.sum(0)
+        self.data_gen = self.data_gen/self.data_gen.max()
+        self.data_gen = self.data_gen.reshape(years, 8760)
+
+        self.sql_connect()
+        self.sql.insert(self.data_gen)
+        self.sql_commit_close()
+
+    def yank(self, rows=1, delete=True):
+        self.sql_connect()
+        self.sql.first_select(rows)
+        self.data_out = self.sql.data
+        if delete:
+            self.sql.first_delete()
+        self.sql_commit_close()
 
 
+    def plot(self, years = 1):
+        for year in range(years):
+            plt.plot(self.data_gen[year, :], label = year)
+        
+        plt.legend()
+        plt.show()
 
-dg_gen = GenerateDG()
-dg_gen.monte(10)
+## Running
+if __name__ == "__main__":
+    dg_gen = GenerateDG('data/db/dg.db')
+    for year in range(1, 4):
+        dg_gen.monte(year)
 
-
+    dg_gen.yank()

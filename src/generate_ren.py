@@ -7,7 +7,7 @@ from sql_numpy import SQL_Numpy
 
 ## Part 2: Making Class
 class GenerateRen():
-    def __init__(self, data_loc, db_loc):
+    def __init__(self, db_loc, data_loc):
         self.db_loc = db_loc
         self.data_loc = data_loc
         self.data_in = np.load(data_loc, allow_pickle=True)
@@ -23,8 +23,8 @@ class GenerateRen():
         self.sql.close()
 
     def monte(self, years):
-        self.sql_connect()
         self.data_gen = full_icdf(self.data_in_split.data_out, years)
+        self.sql_connect()
         self.sql.insert(self.data_gen)
         self.sql_commit_close()
 
@@ -52,12 +52,12 @@ class GenerateRen():
 
 ## Part 3: Running
 if __name__ == "__main__":
-    pv_gen = GenerateRen('data/preprocessing/pv.npy', 'data/db/pv.db')
+    pv_gen = GenerateRen('data/db/pv.db', 'data/preprocessing/pv.npy')
     for year in range(1, 3):
         pv_gen.monte(year)
     pv_gen.yank()
 
-    wt_gen = GenerateRen('data/preprocessing/wt.npy', 'data/db/wt.db')
+    wt_gen = GenerateRen('data/db/wt.db', 'data/preprocessing/wt.npy')
     for year in range(1, 3):
         wt_gen.monte(year)
     wt_gen.yank()
