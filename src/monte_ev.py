@@ -33,10 +33,29 @@ def full_icdf(data, years):
     return np.array(out_array)
 
 ## Starting
-""" 
-data_ev[0] ==> arrival
-data_ev[1] ==> duration
-"""
-data_ev = np.load('data/preprocessing/ev.npy', allow_pickle=True)
-
+ev_split = np.load('data/preprocessing/ev_split.npy', allow_pickle=True)
+ev_split[1,0][0, 13] # Arrivals
+rand = np.random.rand(100)
+A = np.quantile(ev_split[1, 0][0, 13], rand)
+A = np.round(A)
 ## 
+# Weekday
+rand = np.empty((4,2), object)
+ev_arr = np.empty((4,2), object)
+for lot in range(4):
+    for day in range(2):
+        rand[lot, day] = np.empty((1, 24), object)
+        ev_arr[lot, day] = np.empty((1, 24), object)
+
+
+week = 3
+for lot in range(4):
+    for day in range(2):
+        for hour in range(24):
+            if day == 0:
+                rand[lot, day][0, hour] = np.random.rand(week*5)
+            else:
+                rand[lot, day][0, hour] = np.random.rand(week*2)
+
+            ev_arr[lot, day][0, hour] = np.quantile(ev_split[lot, day][0, hour], rand[lot, day][0, hour])
+            ev_arr[lot, day][0, hour] = np.round(ev_arr[lot, day][0, hour])

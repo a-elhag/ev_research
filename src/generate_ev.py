@@ -1,8 +1,6 @@
 ## Part 1: Libraries
 import matplotlib.pyplot as plt
-from monte_ren import full_icdf
 import numpy as np
-from split_ren import SplitRenewables
 from sql_numpy import SQL_Numpy
 
 ## Part 2: Making Class
