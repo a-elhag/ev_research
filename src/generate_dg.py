@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sql_numpy import SQL_Numpy
 
 class GenerateDG():
+    """This will generate DG"""
+
     def __init__(self, db_loc):
         self.db_loc = db_loc
         self.characteristics()
@@ -144,5 +146,4 @@ if __name__ == "__main__":
     dg_gen = GenerateDG('data/db/dg.db')
     for year in range(1, 4):
         dg_gen.monte(year)
-
     dg_gen.yank()

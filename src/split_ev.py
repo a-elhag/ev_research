@@ -23,6 +23,10 @@ ev_split[lot, wday/wend][arr/dur, hour]
     time split
 
 ev_split[0,0][0,10].sum() == ev_split[0,0][1,10].shape
+This is because if we have 5 drivers in the year, 
+ev_split[0,0][0,10] = 3, 1, 2
+and durations for each driver
+ev_split[0, 0][0, 10] = 2, 1, 4, 10, 9 
 """
 
 ev_arr = np.empty((4, 366), object)
