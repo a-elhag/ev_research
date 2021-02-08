@@ -24,7 +24,8 @@ class SQL_Numpy():
         return np.load(out)                          
                                                      
     def connect(self):
-        self.conn = sqlite3.connect(self.db_name, detect_types=sqlite3.PARSE_DECLTYPES)
+        self.conn = sqlite3.connect(self.db_name,
+                                    detect_types=sqlite3.PARSE_DECLTYPES)
         self.cursor = self.conn.cursor()
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS data (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,8 +44,9 @@ class SQL_Numpy():
             pass
                                                      
     def first_delete(self):                          
-        self.cursor.execute(f"""DELETE FROM data WHERE id in (
-            SELECT id FROM data LIMIT {self.rows})""")         
+        self.cursor.execute(f"""DELETE FROM data
+                            WHERE id in
+                            (SELECT id FROM data LIMIT {self.rows})""")         
                                                      
     def commit(self):
         self.conn.commit()
