@@ -1,7 +1,11 @@
+"""
+Need to add SQL_Numpy inputting
+"""
+
 ## Part 0: Importing
 import numpy as np
 import matplotlib.pyplot as plt
-from sql_numpy import SQL_Numpy
+from src.sql_numpy import SQL_Numpy
 
 class GenerateDG():
     """This will generate DG"""
@@ -120,10 +124,6 @@ class GenerateDG():
         self.data_gen = self.data_gen.sum(0)
         self.data_gen = self.data_gen/self.data_gen.max()
         self.data_gen = self.data_gen.reshape(years, 8760)
-
-        self.sql_connect()
-        self.sql.insert(self.data_gen)
-        self.sql_commit_close()
 
     def yank(self, rows=1, delete=True):
         self.sql_connect()
