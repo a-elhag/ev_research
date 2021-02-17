@@ -5,7 +5,7 @@ Need to add SQL_Numpy inputting
 ## Part 0: Importing
 import numpy as np
 import matplotlib.pyplot as plt
-from src.sql_numpy import SQL_Numpy
+from sql_numpy import SQL_Numpy
 
 class GenerateDG():
     """This will generate DG"""
